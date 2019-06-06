@@ -1,0 +1,78 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container container-main">
+  {% include 'includes/messages.html' %}
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Histórico</h3><hr>
+      {% for obj in closed_object_list %}
+      <div class="row">
+        <div class="col-md-5" style="padding-right:0;">
+          {% if obj.image %}
+          <img class="img-responsive center-block" src="{{ obj.image.url }}">
+          {% endif %}
+        </div>
+        <div class="col-md-7">
+          <table class="table table-bordered table-striped table-condensed">
+            <tbody>
+              <tr>
+                <th width="25%" class="text-right">#</th>
+                <td><a target="_blank" href="{% url 'trades:edit' obj.pk %}">{{ obj.symbol }}{% if obj.close_date %}  —  {{ obj.close_date|date:'Y-m-d \à\s H\hi' }}{% endif %}</a></td>
+              </tr>
+              {% if obj.result != Trade.RESULT_NONE %}
+              <tr>
+                <th class="text-right">Result</th>
+                <td>{{ obj.get_result_display }}</td>
+              </tr>
+              {% endif %}
+              <tr>
+                <th class="text-right">Status</th>
+                <td>{{ obj.get_status_display }}</td>
+              </tr>
+              <tr>
+                <th class="text-right">Cycle</th>
+                <td>{{ obj.get_market_cycle_display }}</td>
+              </tr>
+              <tr>
+                <th class="text-right">Type</th>
+                <td>{{ obj.get_optype_display }}</td>
+              </tr>
+              <tr>
+                <th class="text-right">Strategy</th>
+                <td>{{ obj.strategy }}</td>
+              </tr>
+              {% if obj.open_error %}
+              <tr>
+                <th class="text-right">Open Error</th>
+                <td><span class="text-error">{{ obj.open_error }}</span></td>
+              </tr>
+              {% endif %}
+              {% if obj.conduction_error %}
+              <tr>
+                <th class="text-right">Condution Error</th>
+                <td><span class="text-error">{{ obj.conduction_error }}</span></td>
+              </tr>
+              {% endif %}
+              {% if obj.close_error %}
+              <tr>
+                <th class="text-right">Close Error</th>
+                <td><span class="text-error">{{ obj.close_error }}</span></td>
+              </tr>
+              {% endif %}
+              <tr>
+                <th class="text-right">Notes</th>
+                <td>
+                  {{ obj.notes|linebreaks }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div><br><hr><br>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

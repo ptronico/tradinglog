@@ -1,0 +1,190 @@
+
+/* jQueryUI */
+
+div.ui-datepicker {
+font-size:12px;
+}
+
+.popover{
+    max-width: 100%;
+}
+
+/* - - - */
+
+body {
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+  padding-top: 70px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+
+.text-nowrap {
+  white-space: nowrap;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.navbar-brand {
+  /* background: url('../img/3c-logo.png') 10px center no-repeat; */
+}
+
+.container {
+  width: 1170px;
+  /* width: 1824px; */
+}
+
+.container-main {
+  background: #fff;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  -webkit-box-shadow: 0px 0px 5px #bbb;
+     -moz-box-shadow: 0px 0px 5px #bbb;
+          box-shadow: 0px 0px 5px #bbb;
+}
+
+.container-message {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.nav-pills-submenu {
+  padding-bottom: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.navbar-tradinglog {
+  border-top: 3px solid #F47435;
+  border-bottom: 1px solid #ccc;
+}
+
+.navbar-tradinglog:before {
+  content:'';
+  position:absolute;
+  width:100%;
+  height:30px;
+  top:-30px;
+  left:0;
+
+  background: #c40000;
+  background: -moz-linear-gradient(left,  #c40000 0%, #f977a1 33%, #40b8e5 66%, #56bd5b 100%);
+  background: -webkit-linear-gradient(left,  #c40000 0%,#f977a1 33%,#40b8e5 66%,#56bd5b 100%);
+  background: linear-gradient(to right,  #c40000 0%,#f977a1 33%,#40b8e5 66%,#56bd5b 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c40000', endColorstr='#56bd5b', GradientType=1);
+}
+
+.text-error {
+  background:PeachPuff;
+  font-style: italic;
+}
+
+.text-success {
+  background: PaleGreen;
+}
+
+.nav-pills-submenu li a {
+  padding: 5px 10px;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.page-header {
+  margin: 0px 0 20px 0;
+}
+
+.page-header h3 {
+  margin: 0;
+}
+
+.row-device-offset {
+  top:-50px;
+  display:block;
+  position:relative;
+  visibility:hidden;
+}
+
+/* LOGIN */
+
+.form-signin {
+  max-width: 330px;
+  padding: 0 15px 15px 15px;
+  margin: 0 auto;
+}
+
+.form-signin .form-signin-heading, .form-signin {
+  margin-bottom: 10px;
+}
+
+h2.form-signin-heading {
+  background: url('../img/3c-logo.png') 10px center no-repeat;
+  text-indent: 112px;
+  font-size: 20px;
+  padding: 10px 0;
+}
+
+.form-signin .form-control {
+  padding: 10px;
+  font-size: 16px;
+  height: auto;
+  position: relative;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin input[type="email"], .form-signin .username {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.form-reset-password input[type="text"] {
+  margin-bottom: 10px;
+  border-bottom-left-radius:;
+}
+
+/* - - - - - - - - - - - - - - - - - - */
+
+div.field-wrapper {
+  margin-bottom: 5px;
+}
+
+ul.field-validation {
+  margin: 0;
+  padding: 0;
+}
+
+ul.field-validation > li.field-validation-message {
+  font-style: italic;
+  font-size: 95%;
+  color: #a94442;
+  list-style: none;
+  font-weight: bold;
+}
+
+p.field-help-text {
+  color: gray;
+  font-size: 95%;
+  font-style: italic;
+}
+
+a .link-edit {
+  color: #ccc;
+}

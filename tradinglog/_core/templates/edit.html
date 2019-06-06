@@ -1,0 +1,153 @@
+
+{% extends 'base.html' %}
+
+{% load nungoforms %}
+
+{% block content %}
+<div class="container container-main">
+  {% include 'includes/messages.html' %}
+  <div class="row">
+    <div class="col-md-9">
+      <h3 style="margin-top:0;">
+        <a href="{% url 'trades:history' %}">Operações</a> ›
+        {% if trade.pk %}Trade #{{ trade.pk }}{% else %}Nova Operação{% endif %}
+      </h3>
+    </div>
+    <div class="col-md-3">
+      {% if trade.pk %}
+      <h3 class="text-right" style="margin-top:0;">
+        <a target="_blank" href="{% url 'admin:trades_trade_change' trade.pk %}" title="Django Admin"><span class="glyphicon glyphicon-edit"></span></a>
+      </h3>
+      {% endif %}
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <form method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="row">
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.symbol 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.timeframe 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.acctype 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-2" style="padding-right:0;">
+            {% nungoforms form.duration 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.result 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.status 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-2" style="padding-right:0;">
+            {% nungoforms form.close_date 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-3" style="padding-right:0;">
+            {% nungoforms form.market_cycle 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            {% nungoforms form.optype 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-5" style="padding-right:0;">
+            {% nungoforms form.strategy 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col-md-8" style="padding-right:0;">
+            {% nungoforms form.open_error 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8" style="padding-right:0;">
+            {% nungoforms form.conduction_error 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8" style="padding-right:0;">
+            {% nungoforms form.close_error 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+
+        <hr>
+        <div class="row">
+          {% if trade.image %}
+          <div class="col-md-4">
+            <div class="thumbnail">
+              <img src="{{ trade.image.url }}">
+            </div>
+          </div>
+          <div class="col-md-5">
+            {% nungoforms form.image 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          {% else %}
+          <div class="col-md-9">
+            {% nungoforms form.image 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          {% endif %}
+        </div>
+        <div class="row">
+          <div class="col-md-9" style="padding-right:0;">
+            {% nungoforms form.notes 'nungoforms/bootstrap3/input.html' %}
+          </div>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save</button>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+{% block footer_js %}
+<script type="text/javascript">
+
+  $('#id_close_date').datetimepicker({
+    format: 'DD/MM/YYYY HH:mm',
+  });
+
+  $('#id_strategy').select2({
+    tags: true,
+    allowClear: true,
+    placeholder: 'Estratégia',
+    theme: "bootstrap",
+  });
+
+  $('#id_open_error').select2({
+    tags: true,
+    allowClear: true,
+    placeholder: '',
+    theme: "bootstrap",
+  });
+
+  $('#id_conduction_error').select2({
+    tags: true,
+    allowClear: true,
+    placeholder: '',
+    theme: "bootstrap",
+  });
+
+  $('#id_close_error').select2({
+    tags: true,
+    allowClear: true,
+    placeholder: '',
+    theme: "bootstrap",
+  });
+
+</script>
+{% endblock footer_js %}

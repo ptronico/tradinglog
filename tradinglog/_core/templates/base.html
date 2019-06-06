@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Sistema de acompanhamento de operações no mercado financeiro.">
+    <meta name="author" content="Pedro Vasconcelos">
+    <link rel="icon" href="../../favicon.ico">
+    <link rel="canonical" href="{% url 'trades:dashboard' %}">
+    <title>TradingLOG</title>
+    <link href="{% static 'libs/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs/bootstrap-3.4.1-dist/css/bootstrap-theme.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs/select2-4.0.4/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs/select2-bootstrap-theme-0.1.0-beta.10/dist/select2-bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'libs/bootstrap-datetimepicker-4.17.47/build/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
+    {% comment %}
+    <link href="{% static 'libs/bootstrap-datepicker-1.8.0/dist/css/bootstrap-datepicker3.min.css' %}" rel="stylesheet" type="text/css">
+    {% endcomment %}
+    <link href="{% static 'css/app.css' %}" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    {% include 'includes/topnavbar.html' %}
+    {% block content %}{% endblock %}
+    {% include 'includes/footernungo.html' %}
+    <script src="{% static 'libs/jquery-1.12.4/jquery.min.js' %}"></script>
+    <script src="{% static 'libs/moment.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'libs/select2-4.0.4/dist/js/select2.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-datetimepicker-4.17.47/build/js/bootstrap-datetimepicker.min.js' %}"></script>
+    {% comment %}
+    <script src="{% static 'libs/bootstrap-datepicker-1.8.0/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-datepicker-1.8.0/dist/locales/bootstrap-datepicker.pt-BR.min.js' %}"></script>
+    {% endcomment %}
+    {% block footer_js %}{% endblock %}
+  </body>
+</html>
