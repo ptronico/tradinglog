@@ -8,7 +8,7 @@
 # Packages
 *.egg
 *.egg-info
-build
+# build
 eggs
 parts
 bin
