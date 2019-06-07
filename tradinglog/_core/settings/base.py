@@ -109,15 +109,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     BASE_DIR.child('tradinglog', '_core', 'static'),
 ]
 
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR.child('_data', 'static')
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR.child('_data', 'media')
-
 
 LOGIN_URL = '/admin/login?next=/'
