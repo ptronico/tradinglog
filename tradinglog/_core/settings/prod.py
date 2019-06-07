@@ -13,7 +13,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tradinglog',
-        'USER': 'ptronico',
+        'USER': os.environ['TRADINGLOG_DATABASE_USERNAME'],
         'PASSWORD': os.environ['TRADINGLOG_DATABASE_PASSWORD'],
         'HOST': 'localhost',
         'PORT': '5432',
