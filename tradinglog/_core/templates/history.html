@@ -1,20 +1,37 @@
 
 {% extends 'base.html' %}
 
+{% load text_utils %}
+
 {% block content %}
 <div class="container container-main">
   {% include 'includes/messages.html' %}
   <div class="row">
     <div class="col-md-12">
-      <h3>Histórico</h3><hr>
-      {% for obj in closed_object_list %}
+      <h2>Histórico</h2><hr>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
       <div class="row">
-        <div class="col-md-5" style="padding-right:0;">
-          {% if obj.image %}
-          <img class="img-responsive center-block" src="{{ obj.image.url }}">
-          {% endif %}
+        {% for obj in closed_object_list %}
+        <div class="col-md-12">
+          <h3>
+            <a target="_blank" href="{% url 'trades:edit' obj.pk %}">{{ obj.symbol }}{% if obj.close_date %}  —  {{ obj.close_date|date:'Y-m-d \à\s H\hi' }}{% endif %}</a>
+          </h3>
         </div>
-        <div class="col-md-7">
+        {% if obj.image %}
+        <div class="col-md-12" style="margin-bottom:15px;">
+          <a target="_blank" href="{{ obj.image.url }}"><img class="img-responsive img-thumbnail" src="{{ obj.image.url }}"></a>
+        </div>
+        {% endif %}
+        {% if obj.notes %}
+        <div class="col-md-12" style="margin-bottom:5px;">
+          {{ obj.notes|markdown|safe }}
+        </div>
+        {% endif %}
+        <div class="col-md-12">
           <table class="table table-bordered table-striped table-condensed">
             <tbody>
               <tr>
@@ -61,17 +78,18 @@
                 <td><span class="text-error">{{ obj.close_error }}</span></td>
               </tr>
               {% endif %}
-              <tr>
-                <th class="text-right">Notes</th>
-                <td>
-                  {{ obj.notes|linebreaks }}
-                </td>
-              </tr>
             </tbody>
           </table>
+          <p style="font-style: italic; font-size: 80%; color: #999;">
+            Última atualização em {{ obj.updated|date:'d/m/Y \à\s H\hi' }}.<br>
+            ————— <br><br><br>
+          </p>
         </div>
-      </div><br><hr><br>
-      {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <!-- <h3>Sidebar</h3> -->
     </div>
   </div>
 </div>

@@ -77,10 +77,12 @@ class Trade(models.Model):
     RESULT_NONE = 0
     RESULT_GAIN = 1
     RESULT_LOSS = 2
+    RESULT_BREAK_EVEN = 3
     RESULT_CHOICES = (
         (RESULT_NONE, '--'),
         (RESULT_GAIN, 'GAIN'),
         (RESULT_LOSS, 'LOSS'),
+        (RESULT_BREAK_EVEN, 'BREAK EVEN'),
     )
 
     symbol = models.CharField(max_length=50, default=DEFAULT_SYMBOL)
@@ -102,10 +104,13 @@ class Trade(models.Model):
     conduction_error = models.CharField(max_length=50, blank=True, default=DEFAULT_ERROR)
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_OPEN)
     result = models.SmallIntegerField(choices=RESULT_CHOICES, default=RESULT_NONE)
+    profit = models.FloatField(default=0)
 
     notes = models.TextField(blank=True, default='')
     image = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, default='')
     close_date = models.DateTimeField(blank=True, null=True, default=None)
+
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('-close_date', '-id', )
