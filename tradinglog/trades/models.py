@@ -111,6 +111,7 @@ class Trade(models.Model):
     close_date = models.DateTimeField(blank=True, null=True, default=None)
 
     updated = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('-close_date', '-id', )
