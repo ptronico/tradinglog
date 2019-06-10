@@ -10,8 +10,17 @@
   <hr>
   <div class="row">
     <div class="col-md-12">
+      <h3>Lembre-se</h3>
+      <ul>
+        <li>Não cometer erros estúpidos;</li>
+        <li>1-5 op/dia e 5-20 op/semana são bons números;</li>
+        <li>Não hesite: o que importa é uma sequência de trades;</li>
+      </ul>
+    </div>
+    {% if open_object_list %}
+    <hr>
+    <div class="col-md-12">
       <h3>Operações abertas</h3><hr>
-      {% if open_object_list %}
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
@@ -30,42 +39,8 @@
           {% endfor %}
         </tbody>
       </table>
-      {% else %}
-      <p>Nenhuma operação aberta no momento.</p>
-      {% endif %}
     </div>
-    <div class="col-md-12">
-      <h3>Lembre-se</h3>
-      <ul>
-        <li>Não cometer erros estúpidos;</li>
-        <li>1-5 op/dia e 5-20 op/semana são bons números;</li>
-        <li>Não hesite: o que importa é uma sequência de trades;</li>
-      </ul>
-    </div>
-    <div class="col-md-12">
-      <h3>Roadmap</h3>
-      <hr>
-      <p>
-        Essa aplicação irá organizar o meu desenvolvimento no trading. <br>
-        O objetivo é fazer tracking de performance para usar como feedback.
-      </p>
-      <hr>
-      <ol>
-        <li><s>Modelagem de dados;</s></li>
-        <li><s>Inclusão do cadastro de trades;</s></li>
-        <li><s>Utilização básica (cadastro de alguns trades no Admin);</s></li>
-        <li>Ajustes/deploy;</li>
-        <li>
-          Geração de estatísticas básicas (taxa de acerto geral e por estratégia e erros mais frequentes);
-          <ul>
-            <li>Taxa de acerto geral;</li>
-            <li>Erros mais frequentes (abertura, condução e fechamento);</li>
-          </ul>
-        </li>
-
-        <li>Geração de estatísticas detalhadas (a ser definido);</li>
-      </ol>
-    </div>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}
