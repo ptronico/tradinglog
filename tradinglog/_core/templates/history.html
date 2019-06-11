@@ -60,24 +60,12 @@
                 <th class="text-right">Strategy</th>
                 <td>{{ obj.strategy }}</td>
               </tr>
-              {% if obj.open_error %}
+              {% for error in obj.errors.all %}
               <tr>
                 <th class="text-right">Open Error</th>
-                <td><span class="text-error">{{ obj.open_error }}</span></td>
+                <td><span class="text-error">{{ error.name }}</span></td>
               </tr>
-              {% endif %}
-              {% if obj.conduction_error %}
-              <tr>
-                <th class="text-right">Condution Error</th>
-                <td><span class="text-error">{{ obj.conduction_error }}</span></td>
-              </tr>
-              {% endif %}
-              {% if obj.close_error %}
-              <tr>
-                <th class="text-right">Close Error</th>
-                <td><span class="text-error">{{ obj.close_error }}</span></td>
-              </tr>
-              {% endif %}
+              {% endfor %}
             </tbody>
           </table>
           <p style="font-style: italic; font-size: 80%; color: #999;">

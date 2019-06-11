@@ -1,6 +1,7 @@
 
 {% extends 'base.html' %}
 
+{% load text_utils %}
 {% load nungoforms %}
 
 {% block content %}
@@ -64,24 +65,6 @@
         </div>
 
         <hr>
-
-        <div class="row">
-          <div class="col-md-8" style="padding-right:0;">
-            {% nungoforms form.open_error 'nungoforms/bootstrap3/input.html' %}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8" style="padding-right:0;">
-            {% nungoforms form.conduction_error 'nungoforms/bootstrap3/input.html' %}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-8" style="padding-right:0;">
-            {% nungoforms form.close_error 'nungoforms/bootstrap3/input.html' %}
-          </div>
-        </div>
-
-        <hr>
         <div class="row">
           {% if trade.image %}
           <div class="col-md-4">
@@ -103,10 +86,53 @@
             {% nungoforms form.notes 'nungoforms/bootstrap3/input.html' %}
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-2">
+            <button class="btn btn-primary btn-block" type="submit">Save Trade</button>
+          </div>
+        </div>
 
-        <button class="btn btn-primary" type="submit">Save</button>
 
       </form>
+
+      {% if trade.pk %}
+      <hr>
+      <form method="post">{% csrf_token %}
+        <div class="row">
+          <div class="col-md-6" style="padding-right:0;">
+            {% nungoforms form_errors.error 'nungoforms/bootstrap3/input.html' %}
+          </div>
+          <div class="col-md-1" style="padding-right:0;">
+            <div class="form-group">
+              <label for="exampleInputEmail1">&nbsp;</label>
+              <button type="submit" class="btn btn-default btn-block">Add</button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-md-7" style="padding-right:0;">
+          <div class="list-group">
+            {% for err in trade.errors.all %}
+            <div class="list-group-item">
+              <div class="row">
+                <div class="col-md-11">
+                  <h4 class="list-group-item-heading" style="margin-bottom: 15px;">{{ err.name }}</h4>
+                  {{ err.description|markdown|safe }}
+                </div>
+                <div class="col-md-1" style="padding-left:0;">
+                  <form id="id_form_{{ err.pk }}" method="post">{% csrf_token %}
+                    <input type="hidden" value="{{ err.pk }}" name="remove_error_pk">
+                    <h4 class="list-group-item-heading text-right"><a href="javascript:void(null);" onclick="document.getElementById('id_form_{{ err.pk }}').submit();" style="text-decoration: none; color:#999;">×</a></h4>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
 
     </div>
   </div>
@@ -128,24 +154,10 @@
     theme: "bootstrap",
   });
 
-  $('#id_open_error').select2({
-    tags: true,
+  $('#id_error').select2({
+    tags: false,
     allowClear: true,
-    placeholder: '',
-    theme: "bootstrap",
-  });
-
-  $('#id_conduction_error').select2({
-    tags: true,
-    allowClear: true,
-    placeholder: '',
-    theme: "bootstrap",
-  });
-
-  $('#id_close_error').select2({
-    tags: true,
-    allowClear: true,
-    placeholder: '',
+    placeholder: 'Adicionar erro operacional...',
     theme: "bootstrap",
   });
 

@@ -1,12 +1,18 @@
 from django import forms
 
-from .models import Trade
+from .models import Trade, TradeErrors
 
 
-# class TradeForm(forms.ModelForm):
-#     class Meta:
-#         model = Trade
-#         fields = '__all__'
+class TradeErrors(forms.Form):
+    error = forms.ModelChoiceField(label='Erro operacional', queryset=TradeErrors.objects.all(),
+                                   widget=forms.Select(attrs={'class': 'form-control'}))
+
+    def save(self, trade):
+        trade.errors.add(self.cleaned_data['error'])
+
+
+class TradeErrorRemover(forms.Form):
+    remove_error_pk = forms.IntegerField()
 
 
 class TradeForm(forms.Form):
@@ -29,12 +35,12 @@ class TradeForm(forms.Form):
     strategy = forms.CharField(label='Estratégia', max_length=50, initial=Trade.DEFAULT_STRATEGY,
                                widget=forms.Select(attrs={'class': 'form-control'}))
 
-    open_error = forms.CharField(label='Erro na abertura', max_length=50, initial=Trade.DEFAULT_ERROR,
-                                 required=False, widget=forms.Select(attrs={'class': 'form-control'}))
-    conduction_error = forms.CharField(label='Erro na condução', max_length=50, initial=Trade.DEFAULT_ERROR,
-                                       required=False, widget=forms.Select(attrs={'class': 'form-control'}))
-    close_error = forms.CharField(label='Erro no fechamento', max_length=50, initial=Trade.DEFAULT_ERROR,
-                                  required=False, widget=forms.Select(attrs={'class': 'form-control'}))
+    # open_error = forms.CharField(label='Erro na abertura', max_length=50, initial=Trade.DEFAULT_ERROR,
+    #                              required=False, widget=forms.Select(attrs={'class': 'form-control'}))
+    # conduction_error = forms.CharField(label='Erro na condução', max_length=50, initial=Trade.DEFAULT_ERROR,
+    #                                    required=False, widget=forms.Select(attrs={'class': 'form-control'}))
+    # close_error = forms.CharField(label='Erro no fechamento', max_length=50, initial=Trade.DEFAULT_ERROR,
+    #                               required=False, widget=forms.Select(attrs={'class': 'form-control'}))
 
     status = forms.TypedChoiceField(label='Status', choices=Trade.STATUS_CHOICES, initial=Trade.STATUS_OPEN,
                                     coerce=int, widget=forms.Select(attrs={'class': 'form-control'}))
@@ -52,15 +58,15 @@ class TradeForm(forms.Form):
         super(TradeForm, self).__init__(*args, **kwargs)
 
         strategy_list = list(Trade.objects.values_list('strategy', flat=True).order_by('strategy').distinct())
-        open_error_list = list(Trade.objects.values_list('open_error', flat=True).order_by('open_error').distinct())
-        conduction_error_list = list(Trade.objects.values_list('conduction_error', flat=True).order_by(
-                                                               'conduction_error').distinct())
-        close_error_list = list(Trade.objects.values_list('close_error', flat=True).order_by('close_error').distinct())
+        # open_error_list = list(Trade.objects.values_list('open_error', flat=True).order_by('open_error').distinct())
+        # conduction_error_list = list(Trade.objects.values_list('conduction_error', flat=True).order_by(
+        #                                                        'conduction_error').distinct())
+        # close_error_list = list(Trade.objects.values_list('close_error', flat=True).order_by('close_error').distinct())
 
         self.fields['strategy'].widget.choices = [('', '')] + [(s, s) for s in strategy_list if s]
-        self.fields['open_error'].widget.choices = [('', '')] + [(s, s) for s in open_error_list if s]
-        self.fields['conduction_error'].widget.choices = [('', '')] + [(s, s) for s in conduction_error_list if s]
-        self.fields['close_error'].widget.choices = [('', '')] + [(s, s) for s in close_error_list if s]
+        # self.fields['open_error'].widget.choices = [('', '')] + [(s, s) for s in open_error_list if s]
+        # self.fields['conduction_error'].widget.choices = [('', '')] + [(s, s) for s in conduction_error_list if s]
+        # self.fields['close_error'].widget.choices = [('', '')] + [(s, s) for s in close_error_list if s]
 
     def save(self, trade):
         trade.symbol = self.cleaned_data['symbol']
@@ -70,9 +76,9 @@ class TradeForm(forms.Form):
         trade.optype = self.cleaned_data['optype']
         trade.duration = self.cleaned_data['duration']
         trade.strategy = self.cleaned_data['strategy']
-        trade.open_error = self.cleaned_data['open_error']
-        trade.conduction_error = self.cleaned_data['conduction_error']
-        trade.close_error = self.cleaned_data['close_error']
+        # trade.open_error = self.cleaned_data['open_error']
+        # trade.conduction_error = self.cleaned_data['conduction_error']
+        # trade.close_error = self.cleaned_data['close_error']
         trade.status = self.cleaned_data['status']
         trade.result = self.cleaned_data['result']
         trade.notes = self.cleaned_data['notes']

@@ -1,6 +1,35 @@
 from django.db import models
 
 
+class TradeErrors(models.Model):
+
+    LEVEL_NORMAL = 1
+    LEVEL_STUPID = 2
+    LEVEL_CHOICES = (
+        (LEVEL_NORMAL, 'Normal'),
+        (LEVEL_STUPID, 'Stupid'),
+    )
+
+    RELATED_NONE = 0
+    RELATED_OPEN = 1
+    RELATED_CLOSE = 2
+    RELATED_CONDUCTION = 3
+    RELATED_CHOICES = (
+        (RELATED_NONE, '--'),
+        (RELATED_OPEN, 'Abertura da operação'),
+        (RELATED_CONDUCTION, 'Condução da operação'),
+        (RELATED_CLOSE, 'Fechamento da operação'),
+    )
+
+    name = models.CharField(max_length=50)
+    description = models.TextField(blank=True, default='')
+    level = models.SmallIntegerField(choices=LEVEL_CHOICES, default=LEVEL_NORMAL)
+    related_to = models.SmallIntegerField(choices=RELATED_CHOICES, default=RELATED_NONE)
+
+    def __str__(self):
+        return '%s' % self.name
+
+
 class Trade(models.Model):
 
     DEFAULT_ERROR = ''
@@ -85,6 +114,7 @@ class Trade(models.Model):
         (RESULT_BREAK_EVEN, 'BREAK EVEN'),
     )
 
+    errors = models.ManyToManyField(TradeErrors)
     symbol = models.CharField(max_length=50, default=DEFAULT_SYMBOL)
 
     timeframe = models.SmallIntegerField(choices=TIMEFRAME_CHOICES, default=TIMEFRAME_M5)
@@ -94,10 +124,7 @@ class Trade(models.Model):
     acctype = models.SmallIntegerField(choices=ACC_TYPE_CHOICES, default=ACC_TYPE_REAL)
     duration = models.SmallIntegerField(choices=DURATION_CHOICES, default=DURATION_DAYTRADE)
     strategy = models.CharField(max_length=50, blank=True, default=DEFAULT_STRATEGY)
-
-    is_open_correct = models.BooleanField(default=True)
-    is_close_correct = models.BooleanField(default=True)
-    is_conduction_correct = models.BooleanField(default=True)
+    is_market_interpretation_correct_at_open = models.BooleanField(default=False)
 
     open_error = models.CharField(max_length=50, blank=True, default=DEFAULT_ERROR)
     close_error = models.CharField(max_length=50, blank=True, default=DEFAULT_ERROR)
@@ -105,6 +132,7 @@ class Trade(models.Model):
     status = models.SmallIntegerField(choices=STATUS_CHOICES, default=STATUS_OPEN)
     result = models.SmallIntegerField(choices=RESULT_CHOICES, default=RESULT_NONE)
     profit = models.FloatField(default=0)
+    profit_ticks = models.FloatField(default=0)
 
     notes = models.TextField(blank=True, default='')
     image = models.ImageField(upload_to='uploads/%Y/%m/%d/', blank=True, default='')

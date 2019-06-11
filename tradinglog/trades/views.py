@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 from .utils import handle_uploaded_file
-from .forms import TradeForm
+from .forms import TradeForm, TradeErrors, TradeErrorRemover
 from .models import Trade
 
 
@@ -42,7 +42,7 @@ def edit(request, pk=None):
 
     trade = Trade.objects.get(pk=pk) if pk else Trade()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and 'symbol' in request.POST:
         form = TradeForm(request.POST, request.FILES)
         if form.is_valid():
             trade = form.save(trade)
@@ -71,9 +71,9 @@ def edit(request, pk=None):
                 'optype': trade.optype,
                 'duration': trade.duration,
                 'strategy': trade.strategy,
-                'open_error': trade.open_error,
-                'conduction_error': trade.conduction_error,
-                'close_error': trade.close_error,
+                # 'open_error': trade.open_error,
+                # 'conduction_error': trade.conduction_error,
+                # 'close_error': trade.close_error,
                 'status': trade.status,
                 'result': trade.result,
                 'notes': trade.notes,
@@ -82,8 +82,28 @@ def edit(request, pk=None):
                 initial['close_date'] = trade.close_date.astimezone().strftime('%d/%m/%Y %H:%M')
         form = TradeForm(initial=initial)
 
+    if request.method == 'POST' and 'error' in request.POST:
+        form_errors = TradeErrors(request.POST)
+        if form_errors.is_valid():
+            form_errors.save(trade)
+            messages.success(request, '<h3 style="margin:0;">New error successfully set!</h3>')
+            return redirect(reverse('trades:edit', args=[trade.pk]))
+        else:
+            messages.error(request, '<h3 style="margin:0;">Your form contains errors!</h3>')
+    else:
+        form_errors = TradeErrors()
+
+    # Remoção de erros
+    if request.method == 'POST' and 'remove_error_pk' in request.POST:
+        form_remove = TradeErrorRemover(request.POST)
+        if form_remove.is_valid():
+            trade.errors.remove(form_remove.cleaned_data['remove_error_pk'])
+            messages.success(request, '<h3 style="margin:0;">Erro removido com sucesso!</h3>')
+            return redirect(reverse('trades:edit', args=[trade.pk]))
+
     context = {
         'form': form,
+        'form_errors': form_errors,
         'trade': trade,
     }
 
