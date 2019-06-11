@@ -35,34 +35,20 @@
           <table class="table table-bordered table-striped table-condensed">
             <tbody>
               <tr>
-                <th width="25%" class="text-right">#</th>
-                <td><a target="_blank" href="{% url 'trades:edit' obj.pk %}">{{ obj.symbol }}{% if obj.close_date %}  —  {{ obj.close_date|date:'Y-m-d \à\s H\hi' }}{% endif %}</a></td>
-              </tr>
-              {% if obj.result != Trade.RESULT_NONE %}
-              <tr>
-                <th class="text-right">Result</th>
-                <td>{{ obj.get_result_display }}</td>
-              </tr>
-              {% endif %}
-              <tr>
-                <th class="text-right">Status</th>
-                <td>{{ obj.get_status_display }}</td>
-              </tr>
-              <tr>
-                <th class="text-right">Cycle</th>
-                <td>{{ obj.get_market_cycle_display }}</td>
+                <th class="text-right">Strategy</th>
+                <td>{{ obj.strategy }}</td>
               </tr>
               <tr>
                 <th class="text-right">Type</th>
                 <td>{{ obj.get_optype_display }}</td>
               </tr>
               <tr>
-                <th class="text-right">Strategy</th>
-                <td>{{ obj.strategy }}</td>
+                <th class="text-right">Cycle</th>
+                <td>{{ obj.get_market_cycle_display }}</td>
               </tr>
               {% for error in obj.errors.all %}
               <tr>
-                <th class="text-right">Open Error</th>
+                <th class="text-right">{{ error.get_related_to_display }}</th>
                 <td><span class="text-error">{{ error.name }}</span></td>
               </tr>
               {% endfor %}

@@ -15,16 +15,19 @@ class TradeErrors(models.Model):
     RELATED_CLOSE = 2
     RELATED_CONDUCTION = 3
     RELATED_CHOICES = (
-        (RELATED_NONE, '--'),
-        (RELATED_OPEN, 'Abertura da operação'),
-        (RELATED_CONDUCTION, 'Condução da operação'),
-        (RELATED_CLOSE, 'Fechamento da operação'),
+        (RELATED_NONE, 'Erro na operação'),
+        (RELATED_OPEN, 'Erro na abertura'),
+        (RELATED_CONDUCTION, 'Erro na condução'),
+        (RELATED_CLOSE, 'Erro no fechamento'),
     )
 
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, default='')
     level = models.SmallIntegerField(choices=LEVEL_CHOICES, default=LEVEL_NORMAL)
     related_to = models.SmallIntegerField(choices=RELATED_CHOICES, default=RELATED_NONE)
+
+    class Meta:
+        ordering = ('related_to', )
 
     def __str__(self):
         return '%s' % self.name
