@@ -3,19 +3,41 @@
 
 {% block content %}
 <div class="container container-fluid container-main">
+  <!--
   <div class="starter-template">
     <h1>Trading Log</h1>
     <p class="lead">Sistema de acompanhamento de operações no mercado financeiro.</p>
   </div>
   <hr>
+  -->
+  <!--
   <div class="row">
     <div class="col-md-12">
+      <div id="profit_chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    </div>
+  </div>
+  <hr>
+  -->
+  <div class="row">
+    <div class="col-md-12">
+      <h2>
+        Saldo atual acumulado:
+        <span style="color:{% if current_acm_balance > 0 %}{{ hc_gain_color }}{% else %}{{ hc_gain_color }}{% endif %}">R$ {{ current_acm_balance|floatformat:2 }}</span>
+      </h2><hr>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <h3>Lembre-se</h3>
       <ul>
         <li>Não cometer erros estúpidos;</li>
+        <li>Stick to the plan: scalp 1:1, swing 1:2;</li>
         <li>1-5 op/dia e 5-20 op/semana são bons números;</li>
         <li>Não hesite: o que importa é uma sequência de trades;</li>
       </ul>
+    </div>
+    <div class="col-md-6">
+      <div id="result_pie" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
     </div>
     {% if open_object_list %}
     <hr>
@@ -44,3 +66,107 @@
   </div>
 </div>
 {% endblock content %}
+
+
+{% block footer_js %}
+<script type="text/javascript">
+  /*
+  Highcharts.chart('profit_chart', {
+    chart: {type: 'area'},
+    legend: false,
+    credits: false,
+    exporting: false,
+    title: {text: null},
+    xAxis: {
+      allowDecimals: false,
+      labels: {
+        formatter: function () {
+          return this.value; // clean, unformatted number for year
+        }
+      }
+    },
+    yAxis: {
+      title: {
+        text: 'Valor em Reais'
+      },
+      labels: {
+        formatter: function () {
+            return 'R$ ' + this.value.toFixed(2);
+        }
+      }
+    },
+    tooltip: {
+      shared: true,
+      useHTML: true,
+      pointFormat: '<a href=""><b>{series.name} R$ {point.y:,.2f}</b></a>'
+    },
+    plotOptions: {
+      area: {
+        color: '{{ hc_color }}',
+        fillColor: '{{ hc_gain_color }}',
+        negativeFillColor: '{{ hc_loss_color }}',
+        pointStart: {{ result_profit.0.name }},
+        marker: {
+          enabled: false,
+          symbol: 'circle',
+          radius: 2,
+          states: {
+            hover: {
+              enabled: true
+            }
+          }
+        },
+      }
+    },
+    series: [{
+      name: 'Saldo acumulado: ',
+      data: [{% for obj in result_profit %}{{ obj.reais }},{% endfor %}]
+    }]
+  });
+  */
+
+  Highcharts.chart('result_pie', {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      credits: false,
+      exporting: false,
+      title: { text: null },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          }
+        }
+      },
+      series: [{
+        name: 'Resultados',
+        colorByPoint: true,
+        data: [
+          {% for obj in result_stats %}
+            {
+              name: '{{ obj.name }}',
+              y: {{ obj.rate }},
+              {% if obj.name == 'GAIN' %}color: '{{ hc_gain_color }}',{% endif %}
+              {% if obj.name == 'LOSS' %}color: '{{ hc_loss_color }}',{% endif %}
+              {% if obj.name == 'BREAKEVEN' %}color: 'Lightgray',{% endif %}
+              {% if obj.name == 'NOT_SET' %}color: 'Darkgray',{% endif %}
+            },
+          {% endfor %}
+        ]
+      }],
+  });
+</script>
+{% endblock %}

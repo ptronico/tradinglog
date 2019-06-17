@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
+from . import stats
 from .utils import handle_uploaded_file
 from .forms import TradeForm, TradeErrors, TradeErrorRemover
 from .models import Trade
@@ -14,11 +15,18 @@ from .models import Trade
 @login_required
 def dashboard(request):
 
+    result_stats = stats.get_result_totals()
     open_object_list = Trade.objects.filter(status=Trade.STATUS_OPEN)
+
+    result_profit = stats.get_result_profit()
+    current_acm_balance = result_profit[-1]['reais']
 
     context = {
         'Trade': Trade,
+        'result_stats': result_stats,
+        'result_profit': result_profit,
         'open_object_list': open_object_list,
+        'current_acm_balance': current_acm_balance,
     }
 
     return render(request, 'dashboard.html', context)
