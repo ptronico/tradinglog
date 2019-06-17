@@ -22,21 +22,57 @@
     <div class="col-md-12">
       <h2>
         Saldo atual acumulado:
-        <span style="color:{% if current_acm_balance > 0 %}{{ hc_gain_color }}{% else %}{{ hc_gain_color }}{% endif %}">R$ {{ current_acm_balance|floatformat:2 }}</span>
+        <span style="color:{% if current_acm_balance > 0 %}{{ hc_gain_color }}{% else %}{{ hc_loss_color }}{% endif %}">R$ {{ current_acm_balance|floatformat:2 }}</span>
       </h2><hr>
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
-      <h3>Lembre-se</h3>
-      <ul>
-        <li>Não cometer erros estúpidos;</li>
-        <li>Stick to the plan: scalp 1:1, swing 1:2;</li>
-        <li>1-5 op/dia e 5-20 op/semana são bons números;</li>
-        <li>Não hesite: o que importa é uma sequência de trades;</li>
-      </ul>
+      <div class="well well-sm">
+        <h3>Lembre-se</h3>
+        <ul>
+          <li>Não cometer erros estúpidos;</li>
+          <li>Stick to the plan: scalp 1:1, swing 1:2;</li>
+          <li>1-5 op/dia e 5-20 op/semana são bons números;</li>
+          <li>Não hesite: o que importa é uma sequência de trades;</li>
+        </ul>
+      </div>
+      <table class="table table-bordered table-striped">
+        <thead>
+            <th>Erro</th>
+          <th width="10%" class="text-center"></th>
+        </thead>
+        <tbody>
+          {% for obj in error_stats %}
+          <tr>
+              <td>{{ obj.name }}</td>
+            <td class="text-center">{{ obj.count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
     <div class="col-md-6">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <th>Estratégia</th>
+          <th width="10%" class="text-center">GAIN</th>
+          <th width="10%" class="text-center">LOSS</th>
+          <th width="10%" class="text-center">BE</th>
+          <th width="10%" class="text-center">WR</th>
+        </thead>
+        <tbody>
+          {% for obj in strategy_stats %}
+          <tr>
+            <td>{{ obj.name }}</td>
+            <td class="text-center">{{ obj.gain }}</td>
+            <td class="text-center">{{ obj.loss }}</td>
+            <td class="text-center">{{ obj.breakeven }}</td>
+            <td class="text-center">{{ obj.gain_rate }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       <div id="result_pie" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
     </div>
     {% if open_object_list %}

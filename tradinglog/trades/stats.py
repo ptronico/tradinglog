@@ -1,6 +1,6 @@
 from django.db.models import Count, Q
 
-from .models import Trade
+from .models import Trade, TradeErrors
 
 
 def get_result_profit():
@@ -63,3 +63,74 @@ def get_result_totals(start_date=None, end_date=None):
         })
 
     return result
+
+
+def get_strategy_totals(start_date=None, end_date=None):
+    """
+    Returns result statistics as GAIN, LOSS or BREAKEVEN.
+    """
+    qs_filter = {
+        'status': Trade.STATUS_CLOSED,
+        'result__in': [Trade.RESULT_GAIN, Trade.RESULT_LOSS, Trade.RESULT_BREAK_EVEN],
+    }
+    if start_date:
+        qs_filter['close_date__gte'] = start_date
+    if end_date:
+        qs_filter['close_date__lte'] = end_date
+    strategy_list = Trade.objects.filter().values_list('strategy', flat=True).order_by('strategy').distinct()
+
+    agg_gain = {}
+    for s in strategy_list:
+        agg_gain[s] = Count('pk', filter=Q(strategy=s, result=Trade.RESULT_GAIN))
+
+    agg_loss = {}
+    for s in strategy_list:
+        agg_loss[s] = Count('pk', filter=Q(strategy=s, result=Trade.RESULT_LOSS))
+
+    agg_breakeven = {}
+    for s in strategy_list:
+        agg_breakeven[s] = Count('pk', filter=Q(strategy=s, result=Trade.RESULT_BREAK_EVEN))
+
+    result_gain = Trade.objects.filter(**qs_filter).aggregate(**agg_gain)
+    result_loss = Trade.objects.filter(**qs_filter).aggregate(**agg_loss)
+    result_breakeven = Trade.objects.filter(**qs_filter).aggregate(**agg_breakeven)
+
+    result = []
+    for s in strategy_list:
+        total = result_gain[s] + result_loss[s] + result_breakeven[s]
+        result.append({
+            'name': s,
+            'total': total,
+            'gain': result_gain[s],
+            'loss': result_loss[s],
+            'breakeven': result_breakeven[s],
+            'gain_rate': result_gain[s] / total if total else 0,
+            'loss_rate': result_loss[s] / total if total else 0,
+            'breakeven_rate': result_breakeven[s] / total if total else 0,
+        })
+
+    return sorted(result, key=lambda x: x['gain_rate'], reverse=True)
+
+
+def get_errors_totals(start_date=None, end_date=None):
+    """
+    Returns result statistics as GAIN, LOSS or BREAKEVEN.
+    """
+    qs_filter = {
+        'status': Trade.STATUS_CLOSED,
+        'result__in': [Trade.RESULT_GAIN, Trade.RESULT_LOSS, Trade.RESULT_BREAK_EVEN],
+    }
+    if start_date:
+        qs_filter['close_date__gte'] = start_date
+    if end_date:
+        qs_filter['close_date__lte'] = end_date
+    strategy_list = Trade.objects.filter().values_list('strategy', flat=True).order_by('strategy').distinct()
+
+    result = []
+    for te in TradeErrors.objects.all().prefetch_related('trade_set'):
+        result.append({
+            'name': te.name,
+            'count': te.trade_set.all().count(),
+        })
+
+    return sorted(result, key=lambda x: x['count'], reverse=True)
