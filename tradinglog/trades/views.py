@@ -15,8 +15,10 @@ from .models import Trade
 @login_required
 def dashboard(request):
 
+    general_info = stats.get_general_info()
     error_stats = stats.get_errors_totals()
-    result_stats = stats.get_result_totals()
+    # result_stats = stats.get_result_totals()
+    daily_report = stats.get_daily_report()
     strategy_stats = stats.get_strategy_totals()
 
     open_object_list = Trade.objects.filter(status=Trade.STATUS_OPEN)
@@ -27,7 +29,9 @@ def dashboard(request):
     context = {
         'Trade': Trade,
         'error_stats': error_stats,
-        'result_stats': result_stats,
+        'general_info': general_info,
+        'daily_report': daily_report,
+        # 'result_stats': result_stats,
         'result_profit': result_profit,
         'strategy_stats': strategy_stats,
         'open_object_list': open_object_list,
